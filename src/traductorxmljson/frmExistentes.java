@@ -154,7 +154,6 @@ public class frmExistentes extends javax.swing.JFrame {
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         // TODO add your handling code here:
-        //Faltó el botón de salir y su evento
     }//GEN-LAST:event_btnSalirActionPerformed
 
     /**
