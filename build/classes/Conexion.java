@@ -21,6 +21,7 @@ public class Conexion {
     private Statement comando;
    
     @SuppressWarnings("empity-statement")
+<<<<<<< HEAD:build/classes/Conexion.java
     public boolean conectar() throws Exception {
         try {
             
@@ -33,6 +34,20 @@ public class Conexion {
             }
             else {
                 System.out.println("Error, no se pudo conectar");
+=======
+    public boolean Conectar() throws Exception{
+        try {
+            
+            this.conexion = DriverManager.getConnection("jdbc:mysql://localhost/traduccion/admin/'1234'");
+            this.comando = conexion.createStatement();
+            
+            if (true){
+                System.out.println("sobressssss ");
+                
+            }
+            else {
+                System.out.println("Error " );
+>>>>>>> parent of 3092eff... nueva conexion:src/traductorxmljson/Conexion.java
             }
             return true;
         } catch(SQLException exc){
