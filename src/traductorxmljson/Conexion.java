@@ -9,36 +9,32 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.DriverManager;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author alan_
  */
 
-    import java.sql.*;
 public class Conexion {
     private Connection conexion;
     private Statement comando;
    
     @SuppressWarnings("empity-statement")
-    public boolean Conectar() throws Exception{
+    public boolean Conectar(String host, String BD, String User, String Password) throws Exception{
+        boolean con;
         try {
+            DriverManager.registerDriver(new org.gjt.mm.mysql.Driver());
             
-            this.conexion = DriverManager.getConnection("jdbc:mysql://localhost/traduccion/admin/'1234'");
+            this.conexion = DriverManager.getConnection("jdbc:mysql://" + host+"/"+BD , User , Password);
             this.comando = conexion.createStatement();
-            
-            if (true){
-                System.out.println("sobressssss ");
-                
-            }
-            else {
-                System.out.println("Error " );
-            }
-            return true;
+            con = true;
         } catch(SQLException exc){
             System.out.println("Error " + exc.toString());
-            return false;
+            con = false;
         }
+        return con;
     }
 }
     
