@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package traductorxmljson;
 
 /**
@@ -188,8 +183,17 @@ public class frmExistentes extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
-                new frmExistentes().setVisible(true);
+                try {
+                    mConexion.Conectar();
+                    boolean conexion = false;
+                    if (conexion){
+                        new frmExistentes().setVisible(true);
+                    }else {
+                        System.out.println("dice que no");
+                    }
+                } catch (Exception x){
+                    System.out.println(x);
+                }                
             }
         });
     }
