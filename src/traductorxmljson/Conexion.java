@@ -22,10 +22,18 @@ public class Conexion {
    
     @SuppressWarnings("empity-statement")
     public boolean Conectar(String Host, String BD, String User, String Password) throws Exception{
-        try{
+        try {
             
-            this.conexion = DriverManager.getConnection("jdbc:mysql://" + Host + "/" + BD, User, Password);
+            this.conexion = DriverManager.getConnection("jdbc:mysql://localhost/traduccion/admin/'1234'");
             this.comando = conexion.createStatement();
+            
+            if (true){
+                System.out.println("sobressssss ");
+                
+            }
+            else {
+                System.out.println("Error " );
+            }
             return true;
         } catch(SQLException exc){
             System.out.println("Error " + exc.toString());
