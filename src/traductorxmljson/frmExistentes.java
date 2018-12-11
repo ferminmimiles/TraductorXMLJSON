@@ -1,18 +1,32 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package traductorxmljson;
+
+import java.io.File;
+import javax.swing.JFileChooser;
 
 /**
  *
  * @author Fermin Mireles
  */
 public class frmExistentes extends javax.swing.JFrame {
-    private Conexion mConexion;
+    Conexion conexion;
+    frmCaptura fCrear;
     
     /**
      * Creates new form frmExistentes
      */
     public frmExistentes() {
+        conexion=new Conexion();
+        try {
+            conexion.conectar("localhost", "traducciones", "root", "");
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        }
         initComponents();
-        mConexion = new Conexion();
     }
 
     /**
@@ -30,7 +44,6 @@ public class frmExistentes extends javax.swing.JFrame {
         btnTraducir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaEstructuras = new javax.swing.JTable();
-        btnSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -82,13 +95,6 @@ public class frmExistentes extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tablaEstructuras);
 
-        btnSalir.setText("Salir");
-        btnSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalirActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -101,10 +107,7 @@ public class frmExistentes extends javax.swing.JFrame {
                     .addComponent(btnModificar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnTraducir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnCrear, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnSalir)
-                        .addGap(10, 10, 10)))
+                    .addComponent(btnCrear, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(37, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -121,20 +124,27 @@ public class frmExistentes extends javax.swing.JFrame {
                         .addGap(40, 40, 40)
                         .addComponent(btnTraducir))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
-                .addComponent(btnSalir)
-                .addContainerGap())
+                .addGap(46, 46, 46))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTraducirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTraducirActionPerformed
-        // TODO add your handling code here:
+        String tabla= "";
+        JFileChooser file = new JFileChooser();
+        file.setSelectedFile(new File(tabla));
+        file.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int r = file.showSaveDialog(this);
+        if(r==JFileChooser.CANCEL_OPTION){
+            return;   
+        }
+        File archivo=file.getSelectedFile();
+        String ruta = archivo.toString();
     }//GEN-LAST:event_btnTraducirActionPerformed
 
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnCrearActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
@@ -149,14 +159,10 @@ public class frmExistentes extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tablaEstructurasMouseClicked
 
-    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSalirActionPerformed
-
     /**
      * @param args the command line arguments
      */
-    public void main(String args[]) {
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -183,17 +189,7 @@ public class frmExistentes extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                try {
-                    mConexion.Conectar();
-                    boolean conexion = false;
-                    if (conexion){
-                        new frmExistentes().setVisible(true);
-                    }else {
-                        System.out.println("dice que no");
-                    }
-                } catch (Exception x){
-                    System.out.println(x);
-                }                
+                new frmExistentes().setVisible(true);
             }
         });
     }
@@ -202,7 +198,6 @@ public class frmExistentes extends javax.swing.JFrame {
     private javax.swing.JButton btnCrear;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnModificar;
-    private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnTraducir;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tablaEstructuras;
