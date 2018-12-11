@@ -3,6 +3,7 @@ nbproject/private/private.properties
 /TraductorXMLJSON-master/build/
 /TraductorXMLJSON-master/nbproject/private/
 nbproject/private/private.properties
+<<<<<<< HEAD
 TraductorXMLJSON/nbproject/private/private.xml
 *.xml
 *.properties
@@ -15,3 +16,5 @@ build/test/classes/traductorxmljson/controlDatosTest.class
 build/test/classes/traductorxmljson/controlDatosTest.class
 nbproject/private/private.properties
 /dist/
+=======
+>>>>>>> parent of 1c8f2da... controlDatos
