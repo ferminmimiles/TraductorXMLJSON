@@ -9,33 +9,35 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.DriverManager;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author alan_
  */
 
+    import java.sql.*;
 public class Conexion {
     private Connection conexion;
     private Statement comando;
    
     @SuppressWarnings("empity-statement")
-    public boolean Conectar(String host, String BD, String User, String Password) throws Exception{
-        boolean con;
+    public boolean conectar() throws Exception {
         try {
-            DriverManager.registerDriver(new org.gjt.mm.mysql.Driver());
             
-            this.conexion = DriverManager.getConnection("jdbc:mysql://" + host+"/"+BD , User , Password);
+            this.conexion = DriverManager.getConnection("jdbc:mysql://localhost/traduccion/root/''");
             this.comando = conexion.createStatement();
-            con = true;
+            
+            if (true){
+                System.out.println("Conexión exitosa");
+                
+            }
+            else {
+                System.out.println("Error, no se pudo conectar");
+            }
+            return true;
         } catch(SQLException exc){
             System.out.println("Error " + exc.toString());
-            con = false;
+            return false;
         }
-        return con;
     }
 }
-    
-
