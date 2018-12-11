@@ -21,7 +21,7 @@ public class Conexion {
     private Statement comando;
    
     @SuppressWarnings("empity-statement")
-    public boolean Conectar(String Host, String BD, String User, String Password) throws Exception{
+    public boolean Conectar() throws Exception{
         try {
             
             this.conexion = DriverManager.getConnection("jdbc:mysql://localhost/traduccion/admin/'1234'");
@@ -40,20 +40,6 @@ public class Conexion {
             return false;
         }
     }
-        
-        
-    public ResultSet ejecutarConsulta(String instruccionQL) throws SQLException{
-        ResultSet resultado = this.comando.executeQuery(instruccionQL);
-        return resultado;
-    }
-    
-    public int ejecutarActualizacion(String instruccionDML) throws SQLException {
-        int FilasAfectadas;
-        FilasAfectadas = this.comando.executeUpdate(instruccionDML);
-        System.out.println(instruccionDML + "Ejecutada");
-        return FilasAfectadas;
-    }
-
 }
     
 
