@@ -207,7 +207,7 @@ public class Frmcaptura extends javax.swing.JFrame {
             try {
                 mConexion.ejecutarInstruccion(nuevaConsulta);
             } catch (Exception ex) {
-                Logger.getLogger(frmCaptura.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Frmcaptura.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else {
             consulta+= "'?2' '?3' not null);";
@@ -217,7 +217,7 @@ public class Frmcaptura extends javax.swing.JFrame {
             try {
                 mConexion.ejecutarInstruccion(nuevaConsulta);
             } catch (Exception ex) {
-                Logger.getLogger(frmCaptura.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Frmcaptura.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_btnCrearActionPerformed
