@@ -172,11 +172,20 @@ public class Frmcaptura extends javax.swing.JFrame {
 
     public String nombreTabla;
     Conexion mConexion = new Conexion();
-    private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
+    controlDatos mControlDatos = new controlDatos();
         
+    private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
+        int numCampos;
+        String parteUno = "";
+        String parteDos = "";
+        String parteTres = "";
+        String nuevaConsulta = "";
+        
+        numCampos = Integer.parseInt(JOptionPane.showInputDialog("Cuantos campos va a ingresar?: "));
         String campo = txtNombreCampo.getText();
         String tabla = txtNombreTabla.getText();
         String tipo = cmbTiposCampo.getName();
+        
         try {
             mConexion.conectar("localhost","traducciones","root","");
         } catch (Exception ex) {
@@ -184,11 +193,38 @@ public class Frmcaptura extends javax.swing.JFrame {
         }
         String consulta = "create table '?1' (" + "";
         //mControlDatos.Consulta();
+        
+        String inicio = "create table ";
+        String consulta = inicio + "'?1' (";
+        parteUno = consulta.replace("?1", tabla);
         int opcion = JOptionPane.showConfirmDialog(null, "Desea agregar un nuevo campo?", " ", JOptionPane.YES_NO_OPTION);
         if(opcion == 1){
             
+        if(opcion == 0){
+            txtNombreTabla.setEnabled(false);
+            for(int i = 0; i <= numCampos; i++){
+                consulta+= "'?2' '?3' not null, ";
+                parteDos = consulta.replace("?2", campo);
+                parteTres = consulta.replace("?3", tipo);
+            }
+            consulta+= ");";
+            nuevaConsulta = inicio + parteUno + parteDos + parteTres;
+            try {
+                mControlDatos.ejecutarInstruccion(nuevaConsulta);
+            } catch (Exception ex) {
+                Logger.getLogger(frmCaptura.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }else {
             
+            consulta+= "'?2' '?3' not null);";
+            parteDos = consulta.replace("?2", campo);
+            parteTres = consulta.replace("?3", tipo);
+            nuevaConsulta = consulta + parteUno + parteDos + parteTres;
+            try {
+                mControlDatos.ejecutarInstruccion(nuevaConsulta);
+            } catch (Exception ex) {
+                Logger.getLogger(frmCaptura.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnCrearActionPerformed
 
