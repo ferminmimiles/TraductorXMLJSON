@@ -5,6 +5,8 @@
  */
 package traductorxmljson;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -43,7 +45,7 @@ public class Frmcaptura extends javax.swing.JFrame {
         lblCampo = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        taValorCampo = new javax.swing.JTextArea();
         btnGuardar = new javax.swing.JButton();
         btnCancelarContenido = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
@@ -71,15 +73,25 @@ public class Frmcaptura extends javax.swing.JFrame {
 
         jLabel5.setText("Contenido del campo:");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        taValorCampo.setColumns(20);
+        taValorCampo.setRows(5);
+        jScrollPane1.setViewportView(taValorCampo);
 
         btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
 
         btnCancelarContenido.setText("Cancelar");
 
         btnAceptar.setText("Aceptar");
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -152,19 +164,18 @@ public class Frmcaptura extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(lblCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
+                        .addGap(52, 52, 52)
                         .addComponent(jLabel5)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar)
                     .addComponent(btnCancelarContenido)
                     .addComponent(btnAceptar))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -172,9 +183,10 @@ public class Frmcaptura extends javax.swing.JFrame {
 
     public String nombreTabla;
     Conexion mConexion = new Conexion();
+    public int numCampos;
         
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
-        int numCampos;
+
         String parteUno = "";
         String parteDos = "";
         String parteTres = "";
@@ -203,7 +215,7 @@ public class Frmcaptura extends javax.swing.JFrame {
                 parteTres = consulta.replace("?3", tipo);
             }
             consulta+= ");";
-            nuevaConsulta = inicio + parteUno + parteDos + parteTres;
+            nuevaConsulta = consulta + parteUno + parteDos + parteTres;
             try {
                 mConexion.ejecutarInstruccion(nuevaConsulta);
             } catch (Exception ex) {
@@ -221,6 +233,51 @@ public class Frmcaptura extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnCrearActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+        String query = "insert into ";
+        String valorCampo = "";
+        String parteUno = "";
+        String parteDos = "";
+        String parteTres = "";
+        String nuevaConsulta = "";
+        String general = "";
+        
+        try {
+            String sql = "select COLUMN_NAME from information_schema.Columns where TABLE_NAME = '?1' order by COLUMN_NAME;";
+            String consulta = sql.replace("?1", nombreTabla);
+            String [] campos = new String[numCampos];
+            ResultSet res = mConexion.Consulta(consulta);
+            
+            for(int i = 0; i <= numCampos; i++){
+                campos[i] = res.getString(consulta);
+            }
+            for(int j = 0; j <= campos.length; j++){
+                lblCampo.setText(campos[j]);
+                general = query + "'?1' values (";
+                parteUno = general.replace("?1", nombreTabla);
+                valorCampo = taValorCampo.getText();
+                if(campos.length >= 1){
+                    general+="'?2', );";
+                    parteDos = general.replace("?2", valorCampo);
+                }
+                else {
+                    general+="'?2');";
+                    parteDos = general.replace("?2", valorCampo);
+                }
+            }
+            nuevaConsulta = general + parteUno + parteDos;
+            mConexion.Consulta(nuevaConsulta);
+        } catch(SQLException ex){
+            Logger.getLogger(Frmcaptura.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_btnAceptarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -271,8 +328,8 @@ public class Frmcaptura extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lblCampo;
+    private javax.swing.JTextArea taValorCampo;
     private javax.swing.JTextField txtNombreCampo;
     private javax.swing.JTextField txtNombreTabla;
     // End of variables declaration//GEN-END:variables
