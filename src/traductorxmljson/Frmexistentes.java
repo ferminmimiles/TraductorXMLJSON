@@ -6,23 +6,28 @@
 package traductorxmljson;
 
 import java.io.File;
+import java.sql.ResultSet;
 import javax.swing.JFileChooser;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Fermin Mireles
  */
-public class frmExistentes extends javax.swing.JFrame {
-    Conexion conexion;
-    frmCaptura fCrear;
+public class Frmexistentes extends javax.swing.JFrame {
+    DefaultTableModel tableModel;
+    String ruta = "";
+    Conexion mConexion;
+    String nombreTabla = "";
     
     /**
      * Creates new form frmExistentes
      */
-    public frmExistentes() {
-        conexion=new Conexion();
+    public Frmexistentes() {        
+         mConexion=new Conexion();
         try {
-            conexion.conectar("localhost", "traducciones", "root", "");
+            mConexion.conectar("localhost", "traducciones", "root", "");
         } catch (Exception ex) {
             System.out.println(ex.toString());
         }
@@ -48,6 +53,18 @@ public class frmExistentes extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setIconImages(null);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         btnCrear.setText("Crear");
         btnCrear.addActionListener(new java.awt.event.ActionListener() {
@@ -129,7 +146,7 @@ public class frmExistentes extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+   
     private void btnTraducirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTraducirActionPerformed
         String tabla= "";
         JFileChooser file = new JFileChooser();
@@ -140,24 +157,63 @@ public class frmExistentes extends javax.swing.JFrame {
             return;   
         }
         File archivo=file.getSelectedFile();
-        String ruta = archivo.toString();
+        ruta = archivo.toString();
     }//GEN-LAST:event_btnTraducirActionPerformed
 
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
-        
+        new Frmcaptura().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnCrearActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        // TODO add your handling code here:
+        if (!tablaEstructuras.getSelectionModel().isSelectionEmpty()){
+            try {
+                String sql = "drop table " + nombreTabla + ";";
+                mConexion.ejecutarInstruccion(sql);
+            } catch (Exception ex) {
+                System.out.println(ex.toString());
+            }
+        }
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
+        if (!tablaEstructuras.getSelectionModel().isSelectionEmpty()){
+            try {
+                String sql = "drop table " + nombreTabla + ";";
+                mConexion.ejecutarInstruccion(sql);
+            } catch (Exception ex) {
+                System.out.println(ex.toString());
+            }
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void tablaEstructurasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaEstructurasMouseClicked
-        // TODO add your handling code here:
+        int column = 0;
+        int selectedRow = tablaEstructuras.getSelectedRow();
+        nombreTabla = tablaEstructuras.getModel().getValueAt(selectedRow, column).toString();
     }//GEN-LAST:event_tablaEstructurasMouseClicked
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formWindowActivated
+
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        try {
+            String sql = "show tables;";
+            ResultSet set = mConexion.Consulta(sql);
+            if (set != null){
+                Object[] encabezado = {"Estructuras Existentes"};
+                tableModel = new DefaultTableModel(null, encabezado);
+                while(set.next()){
+                    Object[] fila = {set.getString("Tables_in_traducciones")};
+                    tableModel.addRow(fila);
+                }
+                tablaEstructuras.setModel(tableModel);
+            }
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        }
+    }//GEN-LAST:event_formWindowGainedFocus
 
     /**
      * @param args the command line arguments
@@ -176,20 +232,21 @@ public class frmExistentes extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmExistentes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frmexistentes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmExistentes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frmexistentes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmExistentes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frmexistentes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmExistentes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frmexistentes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new frmExistentes().setVisible(true);
+            public void run() {                
+                new Frmexistentes().setVisible(true);
             }
         });
     }

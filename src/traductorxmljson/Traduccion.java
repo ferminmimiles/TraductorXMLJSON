@@ -32,13 +32,11 @@ public class Traduccion {
     Conexion mConexion;
     String ruta;
     String nombreTabla;
-    controlDatos mControlDatos;
     
     public Traduccion(){
         mConexion = new Conexion();
         //ruta = frmExistentes.rutaArchivo;
         //nombreTabla = frmCaptura.nombreTabla;
-        mControlDatos = new controlDatos();
     }
     
     public void traduccionXml()
@@ -50,7 +48,7 @@ public class Traduccion {
             mConexion.conectar("localhost","traducciones","root","");
             String consulta = "SELECT * FROM '?1'";
             String nuevaConsulta = consulta.replace("?1", nombreTabla);
-            ResultSet resultado = mControlDatos.Consulta(nuevaConsulta);
+            ResultSet resultado = mConexion.Consulta(nuevaConsulta);
             ResultSetMetaData datos = resultado.getMetaData();
             int columnas = datos.getColumnCount();
             while (resultado.next()) {
