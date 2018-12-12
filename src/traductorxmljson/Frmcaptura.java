@@ -13,12 +13,12 @@ import javax.swing.JOptionPane;
  *
  * @author Fabián
  */
-public class frmCaptura extends javax.swing.JFrame {
+public class Frmcaptura extends javax.swing.JFrame {
 
     /**
      * Creates new form frmCaptura
      */
-    public frmCaptura() {
+    public Frmcaptura() {
         initComponents();
     }
 
@@ -173,7 +173,7 @@ public class frmCaptura extends javax.swing.JFrame {
     public String nombreTabla;
     Conexion mConexion = new Conexion();
     controlDatos mControlDatos = new controlDatos();
-    
+        
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
         int numCampos;
         String parteUno = "";
@@ -189,7 +189,7 @@ public class frmCaptura extends javax.swing.JFrame {
         try {
             mConexion.conectar("localhost","traducciones","root","");
         } catch (Exception ex) {
-            Logger.getLogger(frmCaptura.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Frmcaptura.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         String inicio = "create table ";
@@ -240,20 +240,21 @@ public class frmCaptura extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmCaptura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frmcaptura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmCaptura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frmcaptura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmCaptura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frmcaptura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmCaptura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frmcaptura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmCaptura().setVisible(true);
+                new Frmcaptura().setVisible(true);
             }
         });
     }

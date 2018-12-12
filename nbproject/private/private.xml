@@ -3,11 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/Fabián/Documents/GitHub/TraductorXMLJSON/src/traductorxmljson/controlDatos.java</file>
             <file>file:/C:/Users/Fabián/Documents/GitHub/TraductorXMLJSON/src/traductorxmljson/Traduccion.java</file>
             <file>file:/C:/Users/Fabián/Documents/GitHub/TraductorXMLJSON/src/traductorxmljson/frmExistentes.java</file>
             <file>file:/C:/Users/Fabián/Documents/GitHub/TraductorXMLJSON/src/traductorxmljson/Conexion.java</file>
             <file>file:/C:/Users/Fabián/Documents/GitHub/TraductorXMLJSON/src/traductorxmljson/frmCaptura.java</file>
+=======
+            <file>file:/C:/Users/Fermin%20Mireles/Documents/Tec/9°%20Semestre/TSP/TraductorXMLJSON/src/traductorxmljson/Controldatos.java</file>
+            <file>file:/C:/Users/Fermin%20Mireles/Documents/Tec/9°%20Semestre/TSP/TraductorXMLJSON/src/traductorxmljson/Conexion.java</file>
+            <file>file:/C:/Users/Fermin%20Mireles/Documents/Tec/9°%20Semestre/TSP/TraductorXMLJSON/src/traductorxmljson/Frmexistentes.java</file>
+>>>>>>> c0ccb430b5b9a12b150f4ba33b97ceaa9e466405
         </group>
     </open-files>
 </project-private>

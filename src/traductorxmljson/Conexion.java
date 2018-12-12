@@ -42,4 +42,33 @@ public class Conexion {
             return false;
         }
     }
+    
+    //M
+    /**Metodo empleado para llevar a cabo una instruccion
+     *La instruccion proviene de la alguno de los formularios
+     * en forma de una cadena de caracteres
+     * @param instruccion
+     * @return resultado
+     * @throws java.sql.Exception
+     */
+    public ResultSet Consulta(String instruccion) throws SQLException {
+
+        ResultSet resultado = this.comando.executeQuery(instruccion);
+        return resultado;
+    }
+    
+    //M
+    /**Metodo empleado para llevar a cabo la manipulacion de la base de datos
+     * recibe comandos como INSERT, UPDATE, DELETE, CREATE, DROP, ALT
+     * en forma de cadena de caracteres proveniente de otros formularios
+     * @param instruccion
+     * @return ejecutado
+     * @throws java.sql.Exception 
+     */
+    public int ejecutarInstruccion(String instruccion) throws SQLException {
+        int i;
+        i = this.comando.executeUpdate(instruccion);
+        System.out.println(instruccion + " Ejecutada");
+        return i;
+    }
 }
