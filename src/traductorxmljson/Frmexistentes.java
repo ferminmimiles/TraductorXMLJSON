@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Frmexistentes extends javax.swing.JFrame {
     DefaultTableModel tableModel;
-    String ruta = "";
+    public String ruta = "";
     Conexion mConexion;
     String nombreTabla = "";
     

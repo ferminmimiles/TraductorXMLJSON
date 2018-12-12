@@ -172,7 +172,6 @@ public class Frmcaptura extends javax.swing.JFrame {
 
     public String nombreTabla;
     Conexion mConexion = new Conexion();
-    controlDatos mControlDatos = new controlDatos();
         
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
         int numCampos;
@@ -206,7 +205,7 @@ public class Frmcaptura extends javax.swing.JFrame {
             consulta+= ");";
             nuevaConsulta = inicio + parteUno + parteDos + parteTres;
             try {
-                mControlDatos.ejecutarInstruccion(nuevaConsulta);
+                mConexion.ejecutarInstruccion(nuevaConsulta);
             } catch (Exception ex) {
                 Logger.getLogger(frmCaptura.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -216,7 +215,7 @@ public class Frmcaptura extends javax.swing.JFrame {
             parteTres = consulta.replace("?3", tipo);
             nuevaConsulta = consulta + parteUno + parteDos + parteTres;
             try {
-                mControlDatos.ejecutarInstruccion(nuevaConsulta);
+                mConexion.ejecutarInstruccion(nuevaConsulta);
             } catch (Exception ex) {
                 Logger.getLogger(frmCaptura.class.getName()).log(Level.SEVERE, null, ex);
             }

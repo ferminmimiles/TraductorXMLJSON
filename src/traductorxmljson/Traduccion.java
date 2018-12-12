@@ -35,8 +35,8 @@ public class Traduccion {
     
     public Traduccion(){
         mConexion = new Conexion();
-        //ruta = frmExistentes.rutaArchivo;
-        //nombreTabla = frmCaptura.nombreTabla;
+        ruta = frmExistentes.rutaArchivo;
+        nombreTabla = frmCaptura.nombreTabla;
     }
     
     public void traduccionXml()
