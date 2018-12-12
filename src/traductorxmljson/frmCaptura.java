@@ -191,15 +191,11 @@ public class frmCaptura extends javax.swing.JFrame {
         } catch (Exception ex) {
             Logger.getLogger(frmCaptura.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String consulta = "create table '?1' (" + "";
-        //mControlDatos.Consulta();
         
         String inicio = "create table ";
         String consulta = inicio + "'?1' (";
         parteUno = consulta.replace("?1", tabla);
         int opcion = JOptionPane.showConfirmDialog(null, "Desea agregar un nuevo campo?", " ", JOptionPane.YES_NO_OPTION);
-        if(opcion == 1){
-            
         if(opcion == 0){
             txtNombreTabla.setEnabled(false);
             for(int i = 0; i <= numCampos; i++){
@@ -215,7 +211,6 @@ public class frmCaptura extends javax.swing.JFrame {
                 Logger.getLogger(frmCaptura.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else {
-            
             consulta+= "'?2' '?3' not null);";
             parteDos = consulta.replace("?2", campo);
             parteTres = consulta.replace("?3", tipo);
