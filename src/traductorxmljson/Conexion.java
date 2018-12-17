@@ -6,6 +6,7 @@
 package traductorxmljson;
 
 import java.sql.*;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -57,7 +58,6 @@ public class Conexion {
     public int ejecutarInstruccion(String instruccion) throws SQLException {
         int i;
         i = this.comando.executeUpdate(instruccion);
-        System.out.println(instruccion + " Ejecutada");
         return i;
     }
 }

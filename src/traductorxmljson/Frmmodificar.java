@@ -5,19 +5,28 @@
  */
 package traductorxmljson;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 /**
- *
+ *10/12/18
+ * Este form es el encargado de mostrar las estructuras de datos existentes en 
+ * la base de datos, así como prestarse para eliminar, modificar o traducir 
+ * una estructura seleccionada, o en su defecto, crear y llenar una
  * @author Fermin Mireles
  */
+
 public class Frmmodificar extends javax.swing.JFrame {
     public String nombreTabla;
     Conexion mConexion;
-    public int numCampos;    
-    
+    String nCampo;
+    String valorCampo;
+    int Id;
     
     /**
      * Creates new form Frmmodificar
@@ -53,7 +62,7 @@ public class Frmmodificar extends javax.swing.JFrame {
         txtNombreCampo = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         btnCrear = new javax.swing.JButton();
-        btnCancelarNombre = new javax.swing.JButton();
+        btnEliminarCampos = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         taValorCampo = new javax.swing.JTextArea();
@@ -62,6 +71,7 @@ public class Frmmodificar extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         tblExistentes = new javax.swing.JTable();
         txtTipo = new javax.swing.JTextField();
+        btnEliminarDato = new javax.swing.JButton();
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -84,14 +94,19 @@ public class Frmmodificar extends javax.swing.JFrame {
 
         jLabel3.setText("Tipo del campo:");
 
-        btnCrear.setText("Crear");
+        btnCrear.setText("Crear Campo");
         btnCrear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCrearActionPerformed(evt);
             }
         });
 
-        btnCancelarNombre.setText("Cancelar");
+        btnEliminarCampos.setText("Eliminar Campo");
+        btnEliminarCampos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarCamposActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Contenido del campo:");
 
@@ -106,10 +121,15 @@ public class Frmmodificar extends javax.swing.JFrame {
             }
         });
 
-        btnCancelarContenido.setText("Cancelar");
+        btnCancelarContenido.setText("Regresar");
         btnCancelarContenido.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnCancelarContenidoMouseClicked(evt);
+            }
+        });
+        btnCancelarContenido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarContenidoActionPerformed(evt);
             }
         });
 
@@ -139,22 +159,25 @@ public class Frmmodificar extends javax.swing.JFrame {
         });
         jScrollPane4.setViewportView(tblExistentes);
 
+        btnEliminarDato.setText("Eliminar Dato");
+        btnEliminarDato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarDatoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnGuardar)
-                .addGap(147, 147, 147)
+                .addGap(47, 47, 47)
+                .addComponent(btnEliminarDato)
+                .addGap(32, 32, 32)
                 .addComponent(btnCancelarContenido)
-                .addGap(88, 88, 88))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(104, 104, 104)
-                .addComponent(btnCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnCancelarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(106, 106, 106))
+                .addGap(66, 66, 66))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -162,14 +185,18 @@ public class Frmmodificar extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
+                            .addComponent(jLabel3)
                             .addComponent(jLabel5)
-                            .addComponent(jLabel3))
+                            .addComponent(btnCrear, javax.swing.GroupLayout.Alignment.LEADING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtNombreCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtNombreTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(98, 98, 98)
+                                .addComponent(btnEliminarCampos))))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -196,14 +223,15 @@ public class Frmmodificar extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCancelarNombre)
+                    .addComponent(btnEliminarCampos)
                     .addComponent(btnCrear))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar)
-                    .addComponent(btnCancelarContenido))
+                    .addComponent(btnCancelarContenido)
+                    .addComponent(btnEliminarDato))
                 .addContainerGap())
         );
 
@@ -211,19 +239,47 @@ public class Frmmodificar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
-        
+        try {
+            String sql="alter table " + nombreTabla + " add column " + txtNombreCampo.getText() + " " + txtTipo.getText() + ";";
+            mConexion.ejecutarInstruccion(sql);
+            JOptionPane.showMessageDialog(this, "¡Columna creada!");
+        } catch (SQLException ex) {
+            Logger.getLogger(Frmmodificar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        tblExistentes.getModel();
     }//GEN-LAST:event_btnCrearActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        try{
-            String nuevoTNombre = txtNombreTabla.getText();
-            if (!nombreTabla.equals(nuevoTNombre)){
-                String sql="alter table " + nombreTabla + " rename to " + nuevoTNombre + ";";
-                mConexion.ejecutarInstruccion(sql);
+        if(!tblExistentes.getSelectionModel().isSelectionEmpty()){
+            try{
+                String nuevoTNombre = txtNombreTabla.getText();
+                String nuevoCNombre = txtNombreCampo.getText();
+                String nuevoDato = taValorCampo.getText();
+            
+                if ((!nombreTabla.equals(nuevoTNombre)) && (txtNombreTabla.getText() != null)){
+                    String sql="alter table " + nombreTabla + " rename to " 
+                        + nuevoTNombre + ";";
+                    mConexion.ejecutarInstruccion(sql);
+                    JOptionPane.showMessageDialog(this, "¡El nombre de la estructura ah sido actualizado!");
+                } else if((!nCampo.equals(nuevoCNombre) && (txtNombreCampo.getText() != null))){
+                    String sql="alter table " + nombreTabla + " change " + nCampo 
+                        + " " + nuevoCNombre + " " + txtTipo.getText() + ";";
+                    mConexion.ejecutarInstruccion(sql);
+                    JOptionPane.showMessageDialog(this, "¡El nombre del campo ah sido actualizado!");
+                } else if(!valorCampo.equals(nuevoDato) && (taValorCampo.getText() != null)){
+                    String sql="update " + nombreTabla + " set " + nCampo + "='" + nuevoDato + "' where id=" + Id + ";";
+                    mConexion.ejecutarInstruccion(sql);
+                    JOptionPane.showMessageDialog(this, "¡El valor ah sido actualizado!");
+                } else {
+                    JOptionPane.showMessageDialog(this, "¡No hay cambios a realizar!");
+                }
+            }catch(Exception ex){
+                JOptionPane.showMessageDialog(this, ex.toString());
             }
-        }catch(Exception ex){
-            System.out.println(ex.toString());
+        } else {
+            JOptionPane.showMessageDialog(this, "¡Favor de seleccionar un dato a modificar!");
         }
+        tblExistentes.getModel();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarContenidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelarContenidoMouseClicked
@@ -236,9 +292,41 @@ public class Frmmodificar extends javax.swing.JFrame {
         int selectedRow = tblExistentes.getSelectedRow();
         
         txtNombreCampo.setText(tblExistentes.getColumnName(selectedColumn).toString());
-        txtTipo.setText(String.valueOf(tblExistentes.getModel().getColumnClass(selectedColumn).toString()));
+        nCampo = txtNombreCampo.getText();
         taValorCampo.setText(tblExistentes.getModel().getValueAt(selectedRow, selectedColumn).toString());
+        valorCampo = taValorCampo.getText();
+        Id = (int) tblExistentes.getModel().getValueAt(selectedRow,0);
     }//GEN-LAST:event_tblExistentesMouseClicked
+
+    private void btnEliminarCamposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarCamposActionPerformed
+        if(!tblExistentes.getSelectionModel().isSelectionEmpty()){
+            try {
+                String sql="alter table " + nombreTabla + " drop column " + nCampo + ";";
+                mConexion.ejecutarInstruccion(sql);
+                JOptionPane.showMessageDialog(this, "¡Columna eliminada!");
+            } catch (SQLException ex) {
+                Logger.getLogger(Frmmodificar.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        tblExistentes.getModel();
+    }//GEN-LAST:event_btnEliminarCamposActionPerformed
+
+    private void btnEliminarDatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarDatoActionPerformed
+        if(!tblExistentes.getSelectionModel().isSelectionEmpty()){
+            try {
+                String sql="delete from " + nombreTabla + " where id=" + Id + ";";
+                mConexion.ejecutarInstruccion(sql);
+                JOptionPane.showMessageDialog(this, "¡Datos eliminados!");
+            } catch (SQLException ex) {
+                Logger.getLogger(Frmmodificar.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        tblExistentes.getModel();
+    }//GEN-LAST:event_btnEliminarDatoActionPerformed
+
+    private void btnCancelarContenidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarContenidoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCancelarContenidoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -280,8 +368,9 @@ public class Frmmodificar extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelarContenido;
-    private javax.swing.JButton btnCancelarNombre;
     private javax.swing.JButton btnCrear;
+    private javax.swing.JButton btnEliminarCampos;
+    private javax.swing.JButton btnEliminarDato;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
