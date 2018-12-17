@@ -1,18 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package traductorxmljson;
 
 import java.io.File;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.Vector;
 import javax.swing.JFileChooser;
-import javax.swing.ListSelectionModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ *10/12/18
+ * Este form es el encargado de mostrar las estructuras de datos existentes en 
+ * la base de datos, así como prestarse para eliminar, modificar o traducir 
+ * una estructura seleccionada, o en su defecto, crear y llenar una
  * @author Fermin Mireles
  */
 public class Frmexistentes extends javax.swing.JFrame {
@@ -20,12 +20,14 @@ public class Frmexistentes extends javax.swing.JFrame {
     public String ruta = "";
     Conexion mConexion;
     String nombreTabla = "";
+    Frmmodificar mModificar;
     
-    /**
-     * Creates new form frmExistentes
+    //M
+    /**Metodo empleado para inicializar o crear el formulario
      */
     public Frmexistentes() {        
          mConexion=new Conexion();
+         mModificar = new Frmmodificar();
         try {
             mConexion.conectar("localhost", "traducciones", "root", "");
         } catch (Exception ex) {
@@ -146,8 +148,13 @@ public class Frmexistentes extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-   
+    
+    //M
+    /**Metodo empleado para llevar a cabo la traduccion de una estructura 
+     * seleccionada dentro de la tabla de datos
+     */
     private void btnTraducirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTraducirActionPerformed
+        if(!tablaEstructuras.getSelectionModel().isSelectionEmpty()){
         String tabla= "";
         JFileChooser file = new JFileChooser();
         file.setSelectedFile(new File(tabla));
@@ -158,24 +165,66 @@ public class Frmexistentes extends javax.swing.JFrame {
         }
         File archivo=file.getSelectedFile();
         ruta = archivo.toString();
+        } else {
+            JOptionPane.showMessageDialog(this, "¡Favor de seleccionar una estructura!");
+        }
     }//GEN-LAST:event_btnTraducirActionPerformed
 
+    //M
+    /**Metodo empleado para abrir o ejecutar el form de creación, 
+     * empleado para dar de alta nuevas estructuras en la BD
+     */
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
         new Frmcaptura().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnCrearActionPerformed
 
+    //M
+    /**Metodo empleado para ejecutar el form de modificación, 
+     * manda la información que contiene una estructura seleccionada para así 
+     * cargarla de manera "automatica en el form de modificación
+     */
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         if (!tablaEstructuras.getSelectionModel().isSelectionEmpty()){
             try {
-                String sql = "drop table " + nombreTabla + ";";
-                mConexion.ejecutarInstruccion(sql);
+                String esqueletoSQL = "select * from " + nombreTabla + ";";
+                ResultSet set = mConexion.Consulta(esqueletoSQL);
+                ResultSetMetaData metadata = set.getMetaData();
+                
+                Vector<String> columnNames = new Vector<>();
+                int columnCount = metadata.getColumnCount();
+                for (int column = 1; column <= columnCount; column++){
+                    columnNames.add(metadata.getColumnName(column));
+                }
+                
+                Vector<Vector<Object>> data = new Vector<>();
+                while (set.next()){
+                    Vector<Object> vector = new Vector<>();
+                    for(int columnIndex = 1; columnIndex <= columnCount; columnIndex++){
+                        vector.add(set.getObject(columnIndex));
+                    }
+                    data.add(vector);
+                }
+
+                mModificar.txtNombreTabla.setText(nombreTabla);
+                mModificar.nombreTabla = nombreTabla;
+                DefaultTableModel Modelocampo = new DefaultTableModel(data,columnNames);
+                mModificar.tblExistentes.setModel(Modelocampo);
+                mModificar.setVisible(true);
+                this.dispose();
             } catch (Exception ex) {
                 System.out.println(ex.toString());
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "¡Favor de seleccionar una estructura!");
         }
     }//GEN-LAST:event_btnModificarActionPerformed
 
+    //M
+    /**Metodo empleado para llevar a cabo la eliminaciónde una estructura existente
+     * en la base de datos. Dicha estructura debe ser seleccionada previamente
+     * de la tabla
+     */
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         if (!tablaEstructuras.getSelectionModel().isSelectionEmpty()){
             try {
@@ -184,9 +233,15 @@ public class Frmexistentes extends javax.swing.JFrame {
             } catch (Exception ex) {
                 System.out.println(ex.toString());
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "¡Favor de seleccionar una estructura!");
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
+    //M
+    /**Metodo empleado para llevar a cabo la seleccion de una estructura para
+     * posterormente eliminar, modificar o traducir dicha estructura
+     */
     private void tablaEstructurasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaEstructurasMouseClicked
         int column = 0;
         int selectedRow = tablaEstructuras.getSelectedRow();
@@ -197,6 +252,10 @@ public class Frmexistentes extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_formWindowActivated
 
+    //M
+    /**Metodo empleado para cargar las estructuras existentes en la BD
+     * al momento de que el form se ejecuta o iniciliza
+     */
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
         try {
             String sql = "show tables;";
@@ -217,6 +276,11 @@ public class Frmexistentes extends javax.swing.JFrame {
 
     /**
      * @param args the command line arguments
+     */
+
+    //M
+    /**Metodo empleado para llevar a cabo la ejecución de este determinado 
+     * formulario
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
